@@ -1,8 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 function TodoForm(props) {
 
-    const [input, setInput] = useState('')
+    const [input, setInput] = useState(props.edit ? props.edit.value : '')
+
+    const inputRef = useRef(null)
+
+    useEffect(() => {
+            inputRef.current.focus()
+        }
+    )
 
     const handleChange = e => {
         setInput(e.target.value)
@@ -22,14 +29,35 @@ function TodoForm(props) {
     return (
         <div>
             <form className="todo-form" onSubmit={handleSubmit}>
-                <input type='text'
-                       placeholder= 'Add a todo'
-                       value={input}
-                       name='text'
-                       className='todo-input'
-                       onChange={handleChange}
-                />
-                <button className="todo-button">Add t0d0</button>
+                {props.edit ? (
+                    <>
+                    <input
+                          type='text'
+                          placeholder= 'Update your todo'
+                          value={input}
+                          name='text'
+                          className='todo-input edit'
+                          onChange={handleChange}
+                          ref={inputRef}
+                    />
+                    <button className="todo-button edit">Update</button>
+                    </>
+                    ) : (
+                        <>
+                        <input type='text'
+                        placeholder= 'Add a todo'
+                        value={input}
+                        name='text'
+                        className='todo-input'
+                        onChange={handleChange}
+                        ref={inputRef}
+                        />
+                        <button className="todo-button">Add t0d0</button>
+                        </>
+                    )
+
+                }
+
             </form>
         </div>
     );
